@@ -58,7 +58,7 @@ def main():
         
             policies = fetch_conditional_access_policies(access_token)
         else:
-            policies = fetch_conditional_access_policies(args.jsonfile)
+            policies = fetch_conditional_access_policies_file_injest(args.jsonfile)
         
         print("\n\nFetched policies:\n")
         print(policies)
