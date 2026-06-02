@@ -31,6 +31,12 @@ def main():
         action='store_true',
         help='Authenticate using device code flow with Microsoft'
     )
+
+    parser.add_argument(
+        '--jsonfile',
+        type=str,
+        help='Path to a local JSON file containing conditional access policies'
+    )
     # If no arguments are passed, print help and exit
     if len(sys.argv) == 1:
         parser.print_help()
@@ -42,14 +48,21 @@ def main():
     print_color("\n\nStarting Conditional Access Policy Audit...\n", Fore.CYAN)
 
     try:
-        directory = get_output_directory()
-        access_token = authenticate_graph()
+        if not args.jsonfile:
+            directory = get_output_directory()
+            access_token = authenticate_graph()
         
-        # Fetch and display current user
-        current_user = fetch_current_user(access_token)
-        print_color(f"\nAuthenticated as: {current_user}\n", Fore.GREEN)
+            # Fetch and display current user
+            current_user = fetch_current_user(access_token)
+            print_color(f"\nAuthenticated as: {current_user}\n", Fore.GREEN)
         
-        policies = fetch_conditional_access_policies(access_token)
+            policies = fetch_conditional_access_policies(access_token)
+        else:
+            policies = fetch_conditional_access_policies(args.jsonfile)
+        
+        print("\n\nFetched policies:\n")
+        print(policies)
+        print("----------------------------------------------------")
 
         if policies:
             export_policies(policies, directory, access_token)

@@ -198,3 +198,25 @@ def fetch_conditional_access_policies(access_token):
             print(f"An error occurred while accessing {endpoint}. Check 'error_log.txt' for details.")
 
     return list(all_policies.values())
+
+def fetch_conditional_access_policies_file_injest(filepath):
+    all_policies = {}
+
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)  # Parses the whole JSON object
+            
+        # This safely grabs the list from "value" and ignores "@odata.context"
+        policies = data.get('value', [])
+        
+        for policy in policies:
+            policy_id = policy.get('id', 'unknown')
+            if policy_id not in all_policies:
+                all_policies[policy_id] = policy
+                
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        logging.error(f"Error reading JSON file {file_path}: {e}")
+        print(f"An error occurred while accessing the file. Check logs for details.")
+
+    return list(all_policies.values())
+    
