@@ -204,7 +204,7 @@ def fetch_conditional_access_policies_file_injest(filepath):
     all_policies = {}
 
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(filepath, 'r', encoding='utf-8') as f:
             data = json.load(f)  # Parses the whole JSON object
             
         # This safely grabs the list from "value" and ignores "@odata.context"
