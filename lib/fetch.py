@@ -3,6 +3,7 @@ import requests
 from functools import wraps
 import time
 import logging
+import json
 from .utils import GRAPH_API_VERSION
 
 def retry_on_failure(max_retries=3, delay=1):

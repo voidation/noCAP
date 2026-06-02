@@ -48,8 +48,9 @@ def main():
     print_color("\n\nStarting Conditional Access Policy Audit...\n", Fore.CYAN)
 
     try:
+        directory = get_output_directory()
+
         if not args.jsonfile:
-            directory = get_output_directory()
             access_token = authenticate_graph()
         
             # Fetch and display current user
@@ -57,18 +58,19 @@ def main():
             print_color(f"\nAuthenticated as: {current_user}\n", Fore.GREEN)
         
             policies = fetch_conditional_access_policies(access_token)
+
+            if policies:
+                export_policies(policies, directory, access_token)
+                analyze_policies(policies)
+            else:
+                print("No policies retrieved or an error occurred.")
         else:
             policies = fetch_conditional_access_policies_file_injest(args.jsonfile)
         
-        print("\n\nFetched policies:\n")
-        print(policies)
-        print("----------------------------------------------------")
-
-        if policies:
-            export_policies(policies, directory, access_token)
-            analyze_policies(policies)
-        else:
-            print("No policies retrieved or an error occurred.")
+            if policies:
+                analyze_policies(policies)
+            else:
+                print("No policies retrieved or an error occurred.")
     except Exception as e:
         print(f"An error occurred: {e}")
         logging.error(f"Error in main execution: {e}")
