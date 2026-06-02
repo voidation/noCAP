@@ -1,5 +1,5 @@
 from lib.auth import authenticate_graph
-from lib.fetch import fetch_conditional_access_policies, fetch_current_user
+from lib.fetch import fetch_conditional_access_policies, fetch_conditional_access_policies_file_injest, fetch_current_user
 from lib.export import export_policies
 from lib.analyze import analyze_policies
 from lib.utils import get_output_directory
